@@ -1,0 +1,12 @@
+<section class="tic-tac-toe">
+    <header>
+        <h2 ng-if="!won">{{turn || players.playerOne}} Its Your Turn</h2>
+        <h2 ng-if="won">{{won}} has Won </h2>
+    </header>
+
+    <table>
+        <tr ng-repeat="row in [0,1,2]">
+            <td ng-click="cellClick(row, col)" ng-repeat="col in [0,1,2]"></td>
+        </tr>
+    </table>
+</section>

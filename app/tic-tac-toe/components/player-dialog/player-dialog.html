@@ -1,0 +1,36 @@
+<div class="user-dialog container">
+    <br/>
+    <div class="panel panel-default">
+        <div class="panel-heading">Enter Players Names</div>
+
+        <div class="panel-body">
+            <div class="row">
+                <form name="playerNames">
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <span class="input-group-btn">Player 1</span>
+
+                            <input type="text" class="form-control" placeholder="Player 1"
+                                   name="playerOne"
+                                   ng-model="player.playerOne" required>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Player 2"
+                                   name="playerTwo"
+                                   ng-model="player.playerTwo" required>
+
+                            <span class="input-group-btn">Player 2</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="row start-game">
+            <button class="btn-success btn" ng-click="startGame()" ng-disabled="!playerNames.$valid" >Start</button>
+        </div>
+    </div>
+</div>
