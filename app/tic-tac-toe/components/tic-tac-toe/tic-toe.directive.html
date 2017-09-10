@@ -1,12 +1,15 @@
 <section class="tic-tac-toe">
     <header>
-        <h2 ng-if="!won">{{turn || players.playerOne}} Its Your Turn</h2>
+        <h2 ng-if="!won">{{matrix.turn || players.playerOne.name}} Its Your Turn</h2>
         <h2 ng-if="won">{{won}} has Won </h2>
     </header>
 
     <table>
-        <tr ng-repeat="row in [0,1,2]">
-            <td ng-click="cellClick(row, col)" ng-repeat="col in [0,1,2]"></td>
+        <tr ng-repeat="row in matrix.rows">
+            <td ng-click="cellClick($parent.$index, $index)" ng-repeat="col in row track by $index">{{col}}</td>
         </tr>
     </table>
+    <footer>
+        <button class="btn btn-default" ng-click="restart()">Restart</button>
+    </footer>
 </section>

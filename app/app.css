@@ -25,6 +25,9 @@ tic-tac-toe section {
   align-items: center;
   width: 100%;
 }
+tic-tac-toe footer {
+  margin-top: 15px;
+}
 
 tic-tac-toe section header h2 {
   text-transform: capitalize;

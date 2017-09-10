@@ -4,63 +4,66 @@
     angular.module('ticTacToe')
         .factory('validateMatrix', [function () {
             function validate(tickMatrix) {
-                if (tickMatrix.length < 3) {
-                    return false;
-                }
-
-                return visitColumn(tickMatrix) || visitRows(tickMatrix) || visitDiagonals(tickMatrix);
+                return visitRowsAndColumns(tickMatrix) || visitDiagonals(tickMatrix);
             }
 
-            function visitColumn(tickMatrix, matrix) {
-                var isValid = true;
+            function visitRowsAndColumns(tickMatrix) {
+                var matrix = tickMatrix.matrix,
+                    matrixLength = matrix.length,
+                    sign = tickMatrix.player.sign,
+                    isValidRow = true,
+                    isValidColumn = true;
 
-                for (var item = 0 ; item <3 ; item++) {
-                    var count = getPropertyCount(tickMatrix, 'col', item);
-                    if (count === 3) {
-                        isValid = true;
+                while (matrixLength--) {
+                    var matrixRow = matrix[matrixLength],
+                        matrixRowLength = matrixRow.length;
+
+                    isValidRow = true;
+                    isValidColumn = true;
+
+                    while (matrixRowLength--) {
+                        if (matrixRow[matrixRowLength] !== sign) {
+                            isValidRow = false;
+                        }
+
+                        if (matrix[matrixRowLength][matrixLength] !== sign) {
+                            isValidColumn = false;
+                        }
+                    }
+
+                    if (isValidRow || isValidColumn) {
                         break;
-                    } else {
-                        isValid = false;
                     }
                 }
 
-                return isValid;
-            }
-
-            function visitRows(tickMatrix) {
-                var isValid = true;
-
-                for (var item = 0 ; item <3 ; item++) {
-                    var count = getPropertyCount(tickMatrix, 'row', item);
-                    if (count === 3) {
-                        isValid = true;
-                        break;
-                    } else {
-                        isValid = false;
-                    }
-                }
-
-                return isValid;
+                return isValidRow || isValidColumn;
             }
 
             function visitDiagonals(tickMatrix) {
-                var count = 0;
+                var matrix = tickMatrix.matrix,
+                    matrixLength = matrix.length,
+                    sign = tickMatrix.player.sign,
+                    isValidRightDiagonal = true,
+                    isValidLeftDiagonal = true;
 
-                angular.forEach(tickMatrix, function (item) {
-                    if (item.row === item.col) {
-                        count++;
+                while (matrixLength--) {
+                    var row = matrix[matrixLength],
+                        rowLength = row.length;
+
+                    while (rowLength--) {
+                        var rowDiff = rowLength > matrixLength ? rowLength - matrixLength : matrixLength - rowLength;
+
+                        if (rowLength == matrixLength && matrix[rowLength][matrixLength] !== sign) {
+                            isValidRightDiagonal = false;
+                        }
+
+                        if (matrix[matrixLength][rowDiff] !== sign) {
+                            isValidLeftDiagonal = false;
+                        }
                     }
-                });
+                }
 
-                return count === 3;
-            }
-
-            function getPropertyCount(array, prop, value) {
-                var filterArray = array.filter(function (item) {
-                    return item[prop] === value;
-                });
-
-                return filterArray.length;
+                return isValidRightDiagonal || isValidLeftDiagonal;
             }
 
             return {

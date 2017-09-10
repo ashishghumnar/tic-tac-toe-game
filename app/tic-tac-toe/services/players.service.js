@@ -5,11 +5,13 @@
             var players = null;
 
             function setPlayers(playerlist) {
+                localStorage.setItem('ticTacToePlayers', JSON.stringify(playerlist));
+
                 players = playerlist;
             }
 
             function getPlayers() {
-                return players;
+                return players || JSON.parse(localStorage.getItem('ticTacToePlayers'));
             }
 
             return {

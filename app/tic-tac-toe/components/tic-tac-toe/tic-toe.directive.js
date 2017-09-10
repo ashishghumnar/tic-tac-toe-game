@@ -1,47 +1,50 @@
 angular.module('ticTacToe')
-    .directive('ticTacToe', ['tickMatrix', function (tickMatrix) {
+    .directive('ticTacToe', ['tickMatrix', '$uibModal', function (tickMatrix, $uibModal) {
         return {
             restrict: 'E',
             templateUrl: 'tic-tac-toe/components/tic-tac-toe/tic-toe.directive.html',
             scope: {
-                players: "="
+                players: "=",
+                size: "="
             },
             link: function ($scope, el) {
-                var current = 1;
+                var matrix = tickMatrix.getMatrix(),
+                    players = $scope.players;
+
+                $scope.matrix = {
+                    rows: matrix,
+                    turn: tickMatrix.getLastPlayed().name === players.playerOne.name ? players.playerTwo.name : players.playerOne.name
+                };
 
                 $scope.cellClick = function (row, col) {
-                    var players = $scope.players;
-
                     if (!$scope.won) {
                         var tr = el.find('tr')[row],
                             td = angular.element(tr).find('td')[col],
-                            user = current % 2 ? players.playerOne : players.playerTwo;
+                            lastPlayed = tickMatrix.getLastPlayed();
 
-                        //check for even or odd
-                        if (user === players.playerOne) {
-                            $scope.turn = players.playerTwo;
-                            angular.element(td).append('<span>o</span>');
-                        } else {
-                            $scope.turn = players.playerOne;
-                            angular.element(td).append('<span>x</span>');
-                        }
+                        var player = lastPlayed.name === players.playerOne.name ? players.playerTwo : players.playerOne;
 
-                        current++;
+                        $scope.matrix.rows[row][col] = player.sign;
+
+                        $scope.matrix.turn = player.name === players.playerOne.name ? players.playerTwo.name : players.playerOne.name;
 
                         var isOver = tickMatrix.updateTick({
-                            user: user,
-                            tick: {
-                                row: row,
-                                col: col
-                            }
+                            player: player,
+                            matrix: $scope.matrix.rows
                         });
 
                         if (isOver) {
-                            $scope.won = user;
+                            $scope.won = player.name;
                         }
                     } else {
                         alert("Gave Over, Please Restart");
                     }
+                };
+
+                $scope.restart = function () {
+                    $scope.matrix.rows = tickMatrix.resetTick();
+                    $scope.matrix.turn = players.playerOne.name;
+                    $scope.won = null;
                 };
             }
         }
