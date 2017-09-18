@@ -9,7 +9,6 @@ var server = require('http').Server(app);
 	
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 9004,
     ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || 'localhost';
+	console.log(port, ip);
 	
-	server.listen(port, ip, function(){
-		console.log('server started on 3000');
-	});
+	server.listen(port, ip);
